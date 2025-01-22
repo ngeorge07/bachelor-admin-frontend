@@ -4,7 +4,9 @@ import { Button, Fieldset, Input, Stack } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { Formik, Form } from "formik";
 import { Center } from "@chakra-ui/react";
-import { useAuth } from "@/app/context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
+import { useContext, useState } from "react";
+import { setCookie } from "cookies-next";
 
 type FormData = {
   email: string;
@@ -12,6 +14,9 @@ type FormData = {
 };
 
 export default function SignInPage() {
+  const { onSignInSuccess } = useContext(AuthContext);
+  const [unauthorizedError, setUnauthorizedError] = useState(false);
+
   const initialValues: FormData = {
     email: "",
     password: "",
@@ -38,8 +43,6 @@ export default function SignInPage() {
     return errors;
   };
 
-  const { login, user } = useAuth();
-
   return (
     <Center
       minHeight="100vh"
@@ -51,14 +54,45 @@ export default function SignInPage() {
         initialValues={initialValues}
         validate={validate}
         onSubmit={async (values: FormData, { resetForm }) => {
-          try {
-            await login(values.email, values.password);
-            resetForm();
-            alert("Login successful");
-            console.log("user " + user);
-          } catch (e) {
-            // console.log(e);
-            alert("Login failes");
+          {
+            fetch("http://localhost:3000/api/auth/login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
+              body: JSON.stringify({
+                email: values.email,
+                password: values.password,
+              }),
+            })
+              .then(async (response) => {
+                if (!response.ok) {
+                  return response.json().then((errorData) => {
+                    // Display an error if the user doesn't exist or the password is wrong
+                    setUnauthorizedError(true);
+                    throw new Error(
+                      `Server error! Message: ${errorData.message}`,
+                    );
+                  });
+                }
+
+                return response.json();
+              })
+              .then((data) => {
+                setCookie("token", data.access_token, { secure: true });
+
+                // Run the callback from the auth context to check if the cookie token in still valid
+                onSignInSuccess();
+
+                // remove error if the login was successful
+                setUnauthorizedError(false);
+                resetForm();
+                console.log("Response:", "login was successful");
+              })
+              .catch((error) => {
+                console.error("Error:", error.message);
+              });
           }
         }}
         validateOnBlur={false}
@@ -72,6 +106,7 @@ export default function SignInPage() {
               borderRadius="lg"
               boxShadow="lg"
               maxW="md"
+              invalid={unauthorizedError}
             >
               <Stack mb={4}>
                 <Fieldset.Legend fontSize="lg">Sign in</Fieldset.Legend>
@@ -126,6 +161,10 @@ export default function SignInPage() {
               <Button type="submit" alignSelf="flex-start" mt={4}>
                 Submit
               </Button>
+
+              <Fieldset.ErrorText>
+                Incorrect credentials. Please try again.
+              </Fieldset.ErrorText>
             </Fieldset.Root>
           </Form>
         )}

@@ -1,8 +1,8 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
-import axios from "axios";
-// import { cookies } from "next/headers";
+import { createContext, useState } from "react";
+import { useEffect } from "react";
+import verifyAuth from "@/utils/verifyAuth";
 
 type User = {
   userId: string;
@@ -12,71 +12,70 @@ type User = {
 };
 
 type AuthContextType = {
-  user: User | null;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
+  authState: {
+    isAuthenticated: boolean;
+    userData: User | null;
+  };
+  onSignInSuccess: () => void;
+  onSignOutSuccess: () => void;
 };
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType>({
+  authState: {
+    isAuthenticated: true,
+    userData: null,
+  },
+  onSignInSuccess: () => {},
+  onSignOutSuccess: () => {},
+});
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState(null);
+export const AuthContextProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const [authState, setAuthState] = useState({
+    isAuthenticated: true,
+    userData: null,
+  });
 
-  const login = async (email: string, password: string) => {
-    // const cookieStore = await cookies();
-
-    try {
-      // Send login request
-      const { data } = await axios.post(
-        "http://localhost:3000/api/auth/login",
-        {
-          email,
-          password,
-        },
-      );
-
-      const token = data.access_token;
-
-      if (token) {
-        // Save the token in a cookie
-        // cookieStore.set("authToken", token, { secure: true });
-
-        // Fetch user profile using the token
-        const { data: user } = await axios.get(
-          "http://localhost:3000/api/auth/profile",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
-
-        console.log(user);
-
-        // Set the user in context (or any other state management)
-        setUser(user);
+  useEffect(() => {
+    async function checkAuthentication() {
+      const authenticationResult = await verifyAuth("profile");
+      if (authenticationResult) {
+        setAuthState({
+          isAuthenticated: authenticationResult.isAuthenticated,
+          userData: authenticationResult.userData,
+        });
       }
-    } catch (error) {
-      console.error("Login failed:", error);
-      throw error;
     }
+
+    checkAuthentication();
+  }, [authState.isAuthenticated]);
+
+  const handleSignInSuccess = () => {
+    setAuthState({
+      ...authState,
+      isAuthenticated: true,
+    });
   };
 
-  const logout = async () => {
-    setUser(null);
-    // Remove the token from cookies
-    // (await cookies()).delete("name");
+  const handleSignOutSuccess = () => {
+    setAuthState({
+      ...authState,
+      isAuthenticated: false,
+    });
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        authState,
+        onSignInSuccess: handleSignInSuccess,
+        onSignOutSuccess: handleSignOutSuccess,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
 };

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Provider } from "@/components/ui/provider";
-import { AuthProvider } from "@/app/context/AuthContext";
+import { AuthContextProvider } from "./context/AuthContext";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,9 +15,9 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <body>
-        <AuthProvider>
+        <AuthContextProvider>
           <Provider>{children}</Provider>
-        </AuthProvider>
+        </AuthContextProvider>
       </body>
     </html>
   );
