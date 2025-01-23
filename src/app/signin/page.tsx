@@ -1,12 +1,13 @@
 "use client";
 
-import { Button, Fieldset, Input, Stack } from "@chakra-ui/react";
+import { Button, Fieldset, Input, Stack, Spinner } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { Formik, Form } from "formik";
 import { Center } from "@chakra-ui/react";
 import { AuthContext } from "../context/AuthContext";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { setCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 
 type FormData = {
   email: string;
@@ -14,8 +15,26 @@ type FormData = {
 };
 
 export default function SignInPage() {
-  const { onSignInSuccess } = useContext(AuthContext);
+  const { onSignInSuccess, authState } = useContext(AuthContext);
   const [unauthorizedError, setUnauthorizedError] = useState(false);
+  const router = useRouter();
+  const [loading, setLoading] = useState(true); // Add loading state to show spinner while checking auth state
+
+  useEffect(() => {
+    // Redirect if the user is authenticated
+    if (authState.isAuthenticated) {
+      router.push("/dashboard"); // Redirect to home if authenticated
+    }
+    setLoading(false); // Mark loading as false when the auth state is ready
+  }, [authState.isAuthenticated, router]);
+
+  if (loading) {
+    return (
+      <Center minHeight="100vh">
+        <Spinner size="xl" />
+      </Center>
+    );
+  }
 
   const initialValues: FormData = {
     email: "",
@@ -89,6 +108,7 @@ export default function SignInPage() {
                 setUnauthorizedError(false);
                 resetForm();
                 console.log("Response:", "login was successful");
+                router.push("/dashboard");
               })
               .catch((error) => {
                 console.error("Error:", error.message);
@@ -150,8 +170,8 @@ export default function SignInPage() {
                     value={values.password}
                     onChange={(text) => {
                       handleChange("password")(text);
-                      if (errors.email) {
-                        errors.email = undefined;
+                      if (errors.password) {
+                        errors.password = undefined;
                       }
                     }}
                   />

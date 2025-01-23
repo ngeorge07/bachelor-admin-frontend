@@ -22,7 +22,7 @@ type AuthContextType = {
 
 export const AuthContext = createContext<AuthContextType>({
   authState: {
-    isAuthenticated: true,
+    isAuthenticated: false,
     userData: null,
   },
   onSignInSuccess: () => {},
@@ -35,9 +35,11 @@ export const AuthContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [authState, setAuthState] = useState({
-    isAuthenticated: true,
+    isAuthenticated: false,
     userData: null,
   });
+  const [loading, setLoading] = useState(true); // Track loading state
+  const [authChecked, setAuthChecked] = useState(false); // Track if the authentication check has completed
 
   useEffect(() => {
     async function checkAuthentication() {
@@ -48,6 +50,8 @@ export const AuthContextProvider = ({
           userData: authenticationResult.userData,
         });
       }
+      setLoading(false); // Stop loading after auth check
+      setAuthChecked(true); // Mark authentication check as complete
     }
 
     checkAuthentication();
@@ -75,7 +79,12 @@ export const AuthContextProvider = ({
         onSignOutSuccess: handleSignOutSuccess,
       }}
     >
-      {children}
+      {!authChecked || loading ? (
+        // Show a loading spinner while checking auth or if auth check isn't done
+        <div>Loading...</div>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };
