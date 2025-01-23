@@ -84,7 +84,10 @@ export default function Remarks() {
     <>
       <Flex mb={5} alignItems="center" justifyContent="space-between">
         <Heading>Train Remarks</Heading>
-        <Button onClick={() => router.push("/dashboard/remarks/add-remark")}>
+        <Button
+          as="a"
+          onClick={() => router.push("/dashboard/remarks/add-remark")}
+        >
           Add Remark
         </Button>
       </Flex>

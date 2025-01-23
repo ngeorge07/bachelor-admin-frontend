@@ -73,6 +73,7 @@ export default function RemarkMessage({
             Delete
           </Button>
           <Button
+            as="a"
             variant="subtle"
             colorPalette="blue"
             flex="1"
