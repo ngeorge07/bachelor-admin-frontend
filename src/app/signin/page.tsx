@@ -23,7 +23,7 @@ export default function SignInPage() {
   useEffect(() => {
     // Redirect if the user is authenticated
     if (authState.isAuthenticated) {
-      router.push("/dashboard"); // Redirect to home if authenticated
+      router.push("/remarks"); // Redirect to home if authenticated
     }
     setLoading(false); // Mark loading as false when the auth state is ready
   }, [authState.isAuthenticated, router]);
@@ -108,7 +108,7 @@ export default function SignInPage() {
                 setUnauthorizedError(false);
                 resetForm();
                 console.log("Response:", "login was successful");
-                router.push("/dashboard");
+                router.push("/remarks");
               })
               .catch((error) => {
                 console.error("Error:", error.message);

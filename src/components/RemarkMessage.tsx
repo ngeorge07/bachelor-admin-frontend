@@ -91,7 +91,7 @@ export default function RemarkMessage({
             colorPalette="blue"
             flex="1"
             onClick={() => {
-              router.push(`/dashboard/remarks/${trainNumber}/${messageId}`);
+              router.push(`/remarks/${trainNumber}/${messageId}`);
             }}
           >
             <LuPencil />

@@ -20,16 +20,13 @@ export default function Header() {
         <Flex as="nav" gap="7">
           <Link
             textDecoration={
-              pathname.includes("/dashboard/remarks") ? "underline" : "none"
+              pathname.includes("/remarks") ? "underline" : "none"
             }
-            color={
-              pathname.includes("/dashboard/remarks") ? "white" : "gray.300"
-            }
-            href="/dashboard/remarks"
+            color={pathname.includes("/remarks") ? "white" : "gray.300"}
+            href="/remarks"
           >
             Remarks
           </Link>
-          <Link href="/delays">Delays</Link>
           <Link href="/profile">Profile</Link>
 
           {isSuperAdmin && <Link href="#">Users</Link>}

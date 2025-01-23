@@ -9,11 +9,13 @@ import {
   Card,
   Flex,
   Button,
+  Badge,
 } from "@chakra-ui/react";
 import { getCookie } from "cookies-next";
 import { Remark } from "@/interfaces/Remark";
 import { useRouter } from "next/navigation";
 import RemarkMessage from "@/components/RemarkMessage";
+import { LuPencil } from "react-icons/lu";
 
 // Define the fetch function
 async function fetchRemarks() {
@@ -84,10 +86,7 @@ export default function Remarks() {
     <>
       <Flex mb={5} alignItems="center" justifyContent="space-between">
         <Heading>Train Remarks</Heading>
-        <Button
-          as="a"
-          onClick={() => router.push("/dashboard/remarks/add-remark")}
-        >
+        <Button as="a" onClick={() => router.push("/remarks/add-remark")}>
           Add Remark
         </Button>
       </Flex>
@@ -97,7 +96,24 @@ export default function Remarks() {
           {remarks.map((remark, index) => (
             <Card.Root key={index} overflow="hidden">
               <Card.Body gap="2">
-                <Card.Title>{remark.trainNumber}</Card.Title>
+                <Flex gap="2">
+                  <Card.Title>{remark.trainNumber}</Card.Title>
+                  {remark.delay > 0 ? (
+                    <Badge
+                      cursor="pointer"
+                      as="button"
+                      colorPalette="red"
+                      onClick={() => {}}
+                    >
+                      <LuPencil /> delayed {remark.delay} min.{" "}
+                    </Badge>
+                  ) : (
+                    <Badge colorPalette="green">
+                      <LuPencil /> on time
+                    </Badge>
+                  )}
+                </Flex>
+
                 <Flex flexDirection="row" flexWrap="wrap" gap={5}>
                   {remark.messages.map((message, index) => (
                     <RemarkMessage

@@ -92,7 +92,7 @@ export default function AddRemark() {
                 return response.json();
               })
               .then(() => {
-                router.push(`/dashboard/remarks`);
+                router.push(`/remarks`);
                 console.log("Response:", "remark was successfully added");
               })
               .catch((error) => {
@@ -175,7 +175,7 @@ export default function AddRemark() {
                 <Button
                   variant="subtle"
                   colorPalette="red"
-                  onClick={() => router.push("/dashboard/remarks")}
+                  onClick={() => router.push("/remarks")}
                 >
                   Cancel
                 </Button>

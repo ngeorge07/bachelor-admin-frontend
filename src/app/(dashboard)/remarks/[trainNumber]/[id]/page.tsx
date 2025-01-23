@@ -138,7 +138,7 @@ export default function EditRemark() {
                 return response.json();
               })
               .then(() => {
-                router.push(`/dashboard/remarks`);
+                router.push(`/remarks`);
                 console.log("Response:", "remark was successfully edited");
               })
               .catch((error) => {
@@ -203,7 +203,7 @@ export default function EditRemark() {
                 <Button
                   variant="subtle"
                   colorPalette="red"
-                  onClick={() => router.push("/dashboard/remarks")}
+                  onClick={() => router.push("/remarks")}
                 >
                   Cancel
                 </Button>
