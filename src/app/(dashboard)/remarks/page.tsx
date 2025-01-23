@@ -1,23 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  Heading,
-  Text,
-  Spinner,
-  Box,
-  Card,
-  Flex,
-  Button,
-  Badge,
-} from "@chakra-ui/react";
+import { Heading, Text, Spinner, Box, Flex, Button } from "@chakra-ui/react";
 import { getCookie } from "cookies-next";
 import { Remark } from "@/interfaces/Remark";
 import { useRouter } from "next/navigation";
-import RemarkMessage from "@/components/RemarkMessage";
-import { LuPencil } from "react-icons/lu";
+import RemarkCard from "@/components/RemarkCard";
 
-// Define the fetch function
 async function fetchRemarks() {
   const token = getCookie("token");
 
@@ -94,43 +83,7 @@ export default function Remarks() {
       {remarks.length > 0 ? (
         <Flex direction="column" gap="4">
           {remarks.map((remark, index) => (
-            <Card.Root key={index} overflow="hidden">
-              <Card.Body gap="2">
-                <Flex gap="2">
-                  <Card.Title>{remark.trainNumber}</Card.Title>
-                  {remark.delay > 0 ? (
-                    <Badge
-                      cursor="pointer"
-                      as="button"
-                      colorPalette="red"
-                      onClick={() => {}}
-                    >
-                      <LuPencil /> delayed {remark.delay} min.{" "}
-                    </Badge>
-                  ) : (
-                    <Badge colorPalette="green">
-                      <LuPencil /> on time
-                    </Badge>
-                  )}
-                </Flex>
-
-                <Flex flexDirection="row" flexWrap="wrap" gap={5}>
-                  {remark.messages.map((message, index) => (
-                    <RemarkMessage
-                      key={index}
-                      title={message.title}
-                      message={message.message}
-                      created_by={message.createdBy}
-                      createdAt={message.createdAt}
-                      updatedAt={message.updatedAt}
-                      trainNumber={remark.trainNumber}
-                      messageId={message._id}
-                      loadRemarks={loadRemarks}
-                    />
-                  ))}
-                </Flex>
-              </Card.Body>
-            </Card.Root>
+            <RemarkCard key={index} remark={remark} loadRemarks={loadRemarks} />
           ))}
         </Flex>
       ) : (

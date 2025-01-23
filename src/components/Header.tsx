@@ -22,14 +22,36 @@ export default function Header() {
             textDecoration={
               pathname.includes("/remarks") ? "underline" : "none"
             }
-            color={pathname.includes("/remarks") ? "white" : "gray.300"}
+            colorPalette={pathname.includes("/remarks") ? "white" : "black"}
             href="/remarks"
           >
             Remarks
           </Link>
-          <Link href="/profile">Profile</Link>
+          <Link
+            href="/profile"
+            textDecoration={
+              pathname.includes("/profile") ? "underline" : "none"
+            }
+            colorPalette={
+              pathname.includes("/profile") ? "whiteAlpha" : "blackAlpha"
+            }
+          >
+            Profile
+          </Link>
 
-          {isSuperAdmin && <Link href="#">Users</Link>}
+          {isSuperAdmin && (
+            <Link
+              href="#"
+              textDecoration={
+                pathname.includes("/users") ? "underline" : "none"
+              }
+              colorPalette={
+                pathname.includes("/users") ? "whiteAlpha" : "blackAlpha"
+              }
+            >
+              Users
+            </Link>
+          )}
         </Flex>
 
         <ColorModeButton />
