@@ -73,7 +73,7 @@ export default function Users() {
 
   return (
     <>
-      <Flex mb={5} alignItems="center" justifyContent="space-between">
+      <Flex mb={5} alignItems="center" gap={10}>
         <Heading>Train Remarks</Heading>
         <Button as="a" onClick={() => router.push("/users/add-user")}>
           Add User
