@@ -66,7 +66,7 @@ export default function EditRemark() {
     };
 
     fetchRemarkData();
-  }, []);
+  }, [params.trainNumber, params.id, token]);
 
   const initialValues: FormData = {
     title: title,

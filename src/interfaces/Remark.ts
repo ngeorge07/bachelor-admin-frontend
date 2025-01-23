@@ -3,7 +3,8 @@ export interface Message {
   title: string;
   message: string;
   createdBy: string;
-  createdAt: string; // ISO 8601 date string
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Remark {

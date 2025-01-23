@@ -105,6 +105,8 @@ export default function Remarks() {
                       title={message.title}
                       message={message.message}
                       created_by={message.createdBy}
+                      createdAt={message.createdAt}
+                      updatedAt={message.updatedAt}
                       trainNumber={remark.trainNumber}
                       messageId={message._id}
                       loadRemarks={loadRemarks}

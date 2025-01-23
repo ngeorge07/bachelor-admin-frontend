@@ -2,11 +2,14 @@ import { Card, Button, Text, Stack, HStack } from "@chakra-ui/react";
 import { LuX, LuPencil } from "react-icons/lu";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
+import { format } from "date-fns";
 
 export default function RemarkMessage({
   title,
   message,
   created_by,
+  createdAt,
+  updatedAt,
   trainNumber,
   messageId,
   loadRemarks,
@@ -14,6 +17,8 @@ export default function RemarkMessage({
   title: string;
   message: string;
   created_by: string;
+  createdAt: string;
+  updatedAt?: string;
   trainNumber: string;
   messageId: string;
   loadRemarks: () => Promise<void>;
@@ -45,6 +50,11 @@ export default function RemarkMessage({
     }
   };
 
+  const formattedDate = format(
+    new Date(updatedAt ? updatedAt : createdAt),
+    "dd/MM/yyyy 'at' HH:mm",
+  );
+
   return (
     <>
       <Card.Root width="320px">
@@ -56,6 +66,9 @@ export default function RemarkMessage({
               </Text>
               <Text color="fg.muted" textStyle="sm">
                 Created by {created_by}
+              </Text>
+              <Text color="fg.muted" textStyle="sm">
+                Updated at {formattedDate}
               </Text>
             </Stack>
           </HStack>
