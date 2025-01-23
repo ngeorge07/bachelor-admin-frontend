@@ -41,7 +41,7 @@ export default function Header() {
 
           {isSuperAdmin && (
             <Link
-              href="#"
+              href="/users"
               textDecoration={
                 pathname.includes("/users") ? "underline" : "none"
               }

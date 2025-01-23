@@ -56,49 +56,47 @@ export default function RemarkMessage({
   );
 
   return (
-    <>
-      <Card.Root width="320px">
-        <Card.Body>
-          <HStack mb="6" gap="3">
-            <Stack gap="0">
-              <Text fontWeight="semibold" textStyle="sm">
-                {title}
-              </Text>
-              <Text color="fg.muted" textStyle="sm">
-                Created by {created_by}
-              </Text>
-              <Text color="fg.muted" textStyle="sm">
-                Updated at {formattedDate}
-              </Text>
-            </Stack>
-          </HStack>
+    <Card.Root width="320px">
+      <Card.Body>
+        <HStack mb="6" gap="3">
+          <Stack gap="0">
+            <Text fontWeight="semibold" textStyle="sm">
+              {title}
+            </Text>
+            <Text color="fg.muted" textStyle="sm">
+              Created by {created_by}
+            </Text>
+            <Text color="fg.muted" textStyle="sm">
+              Updated at {formattedDate}
+            </Text>
+          </Stack>
+        </HStack>
 
-          <Card.Description>{message}</Card.Description>
-        </Card.Body>
-        <Card.Footer>
-          <Button
-            variant="subtle"
-            colorPalette="red"
-            flex="1"
-            onClick={() => deleteRemark(trainNumber, messageId)}
-          >
-            <LuX />
-            Delete
-          </Button>
-          <Button
-            as="a"
-            variant="subtle"
-            colorPalette="blue"
-            flex="1"
-            onClick={() => {
-              router.push(`/remarks/${trainNumber}/${messageId}`);
-            }}
-          >
-            <LuPencil />
-            Edit
-          </Button>
-        </Card.Footer>
-      </Card.Root>
-    </>
+        <Card.Description>{message}</Card.Description>
+      </Card.Body>
+      <Card.Footer>
+        <Button
+          variant="subtle"
+          colorPalette="red"
+          flex="1"
+          onClick={() => deleteRemark(trainNumber, messageId)}
+        >
+          <LuX />
+          Delete
+        </Button>
+        <Button
+          as="a"
+          variant="subtle"
+          colorPalette="blue"
+          flex="1"
+          onClick={() => {
+            router.push(`/remarks/${trainNumber}/${messageId}`);
+          }}
+        >
+          <LuPencil />
+          Edit
+        </Button>
+      </Card.Footer>
+    </Card.Root>
   );
 }
