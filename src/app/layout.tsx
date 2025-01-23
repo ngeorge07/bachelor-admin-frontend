@@ -15,9 +15,9 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <body>
-        <AuthContextProvider>
-          <Provider>{children}</Provider>
-        </AuthContextProvider>
+        <Provider>
+          <AuthContextProvider>{children}</AuthContextProvider>
+        </Provider>
       </body>
     </html>
   );

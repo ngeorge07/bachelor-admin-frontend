@@ -3,6 +3,7 @@
 import { createContext, useState } from "react";
 import { useEffect } from "react";
 import verifyAuth from "@/utils/verifyAuth";
+import { Center, Spinner } from "@chakra-ui/react";
 
 type User = {
   userId: string;
@@ -81,7 +82,9 @@ export const AuthContextProvider = ({
     >
       {!authChecked || loading ? (
         // Show a loading spinner while checking auth or if auth check isn't done
-        <div>Loading...</div>
+        <Center minHeight="100vh">
+          <Spinner size="xl" />
+        </Center>
       ) : (
         children
       )}

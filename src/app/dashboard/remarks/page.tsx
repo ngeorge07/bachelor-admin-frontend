@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { getCookie } from "cookies-next";
 import { Remark } from "@/interfaces/Remark";
+import { useRouter } from "next/navigation";
 import RemarkMessage from "@/components/RemarkMessage";
 
 // Define the fetch function
@@ -40,6 +41,7 @@ async function fetchRemarks() {
 }
 
 export default function Remarks() {
+  const router = useRouter();
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -82,7 +84,9 @@ export default function Remarks() {
     <>
       <Flex mb={5} alignItems="center" justifyContent="space-between">
         <Heading>Train Remarks</Heading>
-        <Button>Add Remark</Button>
+        <Button onClick={() => router.push("/dashboard/remarks/add-remark")}>
+          Add Remark
+        </Button>
       </Flex>
 
       {remarks.length > 0 ? (
